@@ -10,19 +10,17 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const rootDir = require("./utils/path");
 
+const errorsController = require("./controllers/errors");
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", (req, res, next) => {
-  next();
-});
+app.set("view engine", "pug");
 
 app.use("/admin", adminRoutes);
-app.use("/shop", shopRoutes);
+app.use(shopRoutes);
 
-app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(rootDir, "views", "404.html"));
-});
+app.use(errorsController.get404);
 
 // const server = http.createServer(app);
 // server.listen(3000);
